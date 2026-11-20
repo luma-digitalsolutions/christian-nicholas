@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { DEPOIMENTOS, FAQ, INSECURITIES, METODO, PASSOS, SITE } from "@/content/site";
+import { DEPOIMENTOS, FAQ, INSECURITIES, METODO, METODO_NOTA, METODO_TEXTO, MISSAO, PASSOS, PROFESSOR_BIO, PROFESSOR_MISSAO_CURTA, SITE, TRAJETORIA, VALORES, VISAO } from "@/content/site";
 import { Reveal } from "../Reveal";
 import { Spot, SplitText } from "../Motion";
 
@@ -35,18 +35,19 @@ export function Emocional() {
 export function Metodo() {
   return (
     <Section id="metodo">
-      <Title eyebrow="Método Emballo">Dançar pode ser *mais simples* do que você imagina.</Title>
+      <Title eyebrow="Método Emballo · Os 4 Elementos da Dança">Transformamos você em uma pessoa *muito mais confiante* através da dança a dois.</Title>
+      <Reveal><p className="mb-12 max-w-3xl text-lg leading-relaxed text-ivory/80">{METODO_TEXTO}</p></Reveal>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {METODO.map((m, n) => (
           <Reveal key={m.n} delay={n * 0.1}>
             <Spot className="h-full"><article className="group h-full border border-gold/25 p-7 transition duration-500 hover:-translate-y-1 hover:border-gold">
               <span className="display outline text-6xl transition group-hover:text-gold">{m.n}</span>
-              <h3 className="mt-6 display text-3xl">{m.t}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-ivory/70">{m.d}</p>
+              <h3 className="mt-6 display text-4xl">{m.t}</h3>
             </article></Spot>
           </Reveal>
         ))}
       </div>
+      <Reveal><p className="mt-8 max-w-2xl display text-2xl italic text-gold">{METODO_NOTA}</p></Reveal>
     </Section>
   );
 }
@@ -56,9 +57,9 @@ export function Professor() {
     <Section id="professor" alt>
       <div className="grid items-center gap-12 md:grid-cols-2">
         <Reveal>
-          <div className="relative aspect-[4/5] overflow-hidden border border-gold/30 bg-ink">
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-[340px] overflow-hidden border border-gold/30 bg-ink">
             {SITE.professorPhoto
-              ? <Image src={SITE.professorPhoto} alt="Professor Christian Nicholas" fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
+              ? <Image src={SITE.professorPhoto} alt="Professor Christian Nicholas" fill className="object-cover" sizes="340px" />
               : <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
                   <Image src="/logoprofessor.png" alt="" width={240} height={127} className="opacity-80" />
                   <p className="text-xs uppercase tracking-[.25em] text-ivory/40">Foto do professor — pendente</p>
@@ -68,12 +69,43 @@ export function Professor() {
         <div>
           <Title eyebrow="O professor">Christian *Nicholas*</Title>
           <Reveal delay={0.1}>
-            <p className="text-lg leading-relaxed text-ivory/80">Professor de dança e criador do Método Emballo, dedicado a ajudar pessoas a dançarem com confiança — mesmo quando sentem vergonha ou acham que não nasceram para isso.</p>
-            {/* PENDENTE: trajetória, formação e experiência — receber do professor / site oficial. Não inventar. */}
-            <p className="mt-5 text-sm text-ivory/50">Trajetória e formação em atualização. Acompanhe o dia a dia no <a className="text-gold underline-offset-4 hover:underline" href={SITE.instagram} target="_blank" rel="noopener noreferrer">Instagram {SITE.instagramHandle}</a>.</p>
+            <div className="space-y-4 text-base leading-relaxed text-ivory/80">
+              {PROFESSOR_BIO.map((t) => <p key={t}>{t}</p>)}
+              <p className="display text-2xl italic text-gold">{PROFESSOR_MISSAO_CURTA}</p>
+            </div>
           </Reveal>
         </div>
       </div>
+    </Section>
+  );
+}
+
+export function Trajetoria() {
+  return (
+    <Section id="trajetoria">
+      <Title eyebrow="O empresário · A trajetória">Não é sobre ensinar passos. *É sobre estrutura.*</Title>
+      <ol className="grid gap-px bg-gold/20 md:grid-cols-5">
+        {TRAJETORIA.map((t, n) => (
+          <Reveal key={t.ano} delay={n * 0.08} className="bg-ink">
+            <li className="h-full p-6">
+              <span className="display outline text-5xl">{t.ano}</span>
+              <h3 className="mt-3 display text-2xl">{t.t}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ivory/70">{t.d}</p>
+            </li>
+          </Reveal>
+        ))}
+      </ol>
+      <div className="mt-16 grid gap-10 md:grid-cols-2">
+        <Reveal><div><p className="eyebrow mb-3">Missão</p><p className="text-lg leading-relaxed text-ivory/80">{MISSAO}</p></div></Reveal>
+        <Reveal delay={0.1}><div><p className="eyebrow mb-3">Visão</p><p className="text-lg leading-relaxed text-ivory/80">{VISAO}</p></div></Reveal>
+      </div>
+      <Reveal><div className="mt-12"><p className="eyebrow mb-4">Valores</p>
+        <ul className="flex flex-wrap gap-3">{VALORES.map((v) => <li key={v} className="border border-gold/30 px-4 py-2 text-sm text-ivory/80">{v}</li>)}</ul>
+      </div></Reveal>
+      <Reveal><p className="mt-16 display text-[clamp(1.8rem,4vw,3rem)] leading-tight">
+        Christian Nicholas não ensina passos. <span className="italic text-gold">Ele ensina estrutura.</span><br />
+        Não forma apenas dançarinos. <span className="italic text-gold">Forma pessoas confiantes.</span>
+      </p></Reveal>
     </Section>
   );
 }
