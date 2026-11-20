@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #080808;
+  --color-ink2: #141414;
+  --color-gold: #d6ae70;
+  --color-bronze: #8b633b;
+  --color-ivory: #f5f0e8;
+  --display: var(--font-display), Georgia, serif;
+  --font-label: var(--font-label), system-ui, sans-serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html { scroll-behavior: smooth; background: #080808; }
+body { background: #080808; color: #f5f0e8; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+::selection { background: #d6ae70; color: #080808; }
+:focus-visible { outline: 2px solid #d6ae70; outline-offset: 3px; }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.eyebrow { font-family: var(--font-label); font-size: .72rem; letter-spacing: .34em; text-transform: uppercase; color: #d6ae70; font-weight: 700; display: inline-flex; align-items: center; gap: .9rem; }
+.eyebrow::before { content: ""; width: 2.2rem; height: 1px; background: currentColor; }
+.display { font-family: var(--font-display), Georgia, serif; font-weight: 400; letter-spacing: -.025em; line-height: .92; }
+.display em { font-style: italic; color: #d6ae70; }
+.outline { color: transparent; -webkit-text-stroke: 1px rgba(214,174,112,.85); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+@keyframes floaty { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(30px,-40px,0) scale(1.15); } }
+.orb { position: absolute; border-radius: 9999px; filter: blur(80px); animation: floaty 14s ease-in-out infinite; pointer-events: none; }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(214,174,112,.55); } 100% { box-shadow: 0 0 0 26px rgba(214,174,112,0); } }
+.pulse { animation: pulse-ring 2s ease-out infinite; }
+.spot { position: relative; overflow: hidden; }
+.spot::before { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .4s; pointer-events: none;
+  background: radial-gradient(360px circle at var(--mx,50%) var(--my,50%), rgba(214,174,112,.22), transparent 60%); }
+.spot:hover::before { opacity: 1; }
+.btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 2rem;
+  background: #d6ae70; color: #080808; font-family: var(--font-label); font-weight: 700; letter-spacing: .16em; font-size: .78rem; text-transform: uppercase;
+  border: 1px solid #d6ae70; transition: background .25s, color .25s, transform .25s; cursor: pointer;
 }
+.btn-gold:hover { background: transparent; color: #d6ae70; }
+.btn-gold:disabled { opacity: .55; cursor: wait; }
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 54px; padding: 0 2rem;
+  border: 1px solid rgba(214,174,112,.55); color: #f5f0e8; font-family: var(--font-label); letter-spacing: .16em; font-size: .78rem; text-transform: uppercase;
+  font-weight: 600; transition: border-color .25s, color .25s; cursor: pointer;
+}
+.btn-ghost:hover { border-color: #d6ae70; color: #d6ae70; }
+.field {
+  width: 100%; min-height: 56px; background: #141414; border: 1px solid rgba(245,240,232,.18); color: #f5f0e8;
+  padding: 0 1rem; font-size: 1rem; border-radius: 0; transition: border-color .2s;
+}
+.field:focus { border-color: #d6ae70; outline: none; }
+.field[aria-invalid="true"] { border-color: #e07a6b; }
+select.field { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #d6ae70 50%), linear-gradient(135deg, #d6ae70 50%, transparent 50%); background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 2.5rem; }
+.rule { height: 1px; background: linear-gradient(90deg, transparent, rgba(214,174,112,.6), transparent); }

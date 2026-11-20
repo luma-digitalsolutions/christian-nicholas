@@ -1,0 +1,2 @@
+turma_id,bairro,nome_turma,local,dia_semana,horario_inicio,horario_fim,capacidade,vagas_disponiveis,status,link_whatsapp,observacoes
+EXEMPLO-01,Bairro Exemplo,Turma Exemplo,Local a definir,TER,19:00,20:00,20,10,PLANEJADA,,Troque para ATIVA e cole o link do grupo
