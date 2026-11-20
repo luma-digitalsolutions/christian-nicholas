@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { CoupleMark } from "../CoupleMark";
 import { useState } from "react";
 
 const LINKS = [["Método", "#metodo"], ["Professor", "#professor"], ["Como funciona", "#como-funciona"], ["Dúvidas", "#duvidas"]];
@@ -10,7 +10,7 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-ink/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <a href="#topo" aria-label="Professor Christian Nicholas — início">
-          <Image src="/logoprofessor.png" alt="Professor Christian Nicholas — Aulas de Dança" width={112} height={59} priority className="h-10 w-auto" />
+          <CoupleMark className="h-11 w-11" />
         </a>
         <nav aria-label="Principal" className="hidden items-center gap-8 md:flex">
           {LINKS.map(([l, h]) => <a key={h} href={h} className="text-xs uppercase tracking-[.22em] text-ivory/80 transition hover:text-gold">{l}</a>)}
