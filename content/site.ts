@@ -21,12 +21,12 @@ export const METODO_TEXTO = "Uma metodologia exclusiva baseada nos 4 Elementos d
 
 // Os 4 Elementos da Dança (texto do professor). Descrições individuais: PENDENTE, não inventar.
 export const METODO = [
-  { n: "01", t: "Pisar" },
-  { n: "02", t: "Tocar" },
-  { n: "03", t: "Dividir" },
-  { n: "04", t: "Apoiar" },
+  { n: "01", t: "Pisar", el: "Terra", d: "Transferir totalmente o peso do corpo para um dos pés, deixando o outro livre." },
+  { n: "02", t: "Tocar", el: "Fogo", d: "Aproveitar esse pé livre para tocar o chão, o parceiro ou a parceira, criando charme, intenção e conexão." },
+  { n: "03", t: "Dividir", el: "Água", d: "Distribuir o peso entre os dois pés, desenvolvendo equilíbrio e novas possibilidades de movimento." },
+  { n: "04", t: "Apoiar", el: "Ar", d: "Aprender a realizar dois movimentos dentro de um mesmo tempo musical, ganhando agilidade e fluidez." },
 ];
-export const METODO_NOTA = "Uma base sólida, consciência corporal e construção real de confiança.";
+export const METODO_NOTA = "São os quatro elementos do Método Emballo: pisar, tocar, dividir e apoiar. Uma base sólida, consciência corporal e construção real de confiança.";
 
 export const PROFESSOR_BIO = [
   "Christian Nicholas é professor de Dança de Salão, formado e mentorado por Jaime Arôxa, e fundador da Emballo Dança de Salão.",
@@ -55,13 +55,17 @@ export const PASSOS = [
 ];
 
 const PEND = "Esta informação será confirmada em breve. Fale com o professor pelo Instagram @profchristiannicholas.";
-export const FAQ = [
+const FAQ_ALL = [
   { q: "Preciso saber dançar?", a: "Não. A proposta do Método Emballo é justamente ajudar quem tem vergonha, se sente sem jeito ou acredita que não nasceu para dançar." },
   { q: "Posso começar sozinho?", a: PEND }, // PENDENTE
   { q: "Como escolho minha turma?", a: "Na seção “Encontre sua turma”, escolha bairro, dia e horário. Mostramos se há uma turma disponível e, se não houver, sugerimos alternativas no seu bairro." },
   { q: "E se não houver turma no meu bairro?", a: "Seu interesse fica registrado. O professor usa esses dados para organizar novas turmas e você poderá ser avisado quando houver novidade." },
   { q: "Como recebo as informações das aulas?", a: "Ao encontrar uma turma, você recebe um botão para entrar no grupo de WhatsApp dela, onde ficam as orientações." },
   { q: "Existe idade mínima?", a: PEND }, // PENDENTE
+
 ];
+
+/** Itens sem resposta confirmada (PEND) nunca vão para a página. */
+export const FAQ = FAQ_ALL.filter((f) => f.a !== PEND);
 
 export const DEPOIMENTOS: { nome: string; texto: string }[] = []; // PENDENTE: só depoimentos reais autorizados

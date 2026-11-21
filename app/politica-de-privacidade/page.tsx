@@ -10,7 +10,7 @@ export default function Privacidade() {
     <main className="mx-auto max-w-3xl px-5 py-20 leading-relaxed text-ivory/80">
       <Link href="/" className="text-sm text-gold">← Voltar</Link>
       <h1 className="mt-6 display text-5xl text-ivory">Política de Privacidade</h1>
-      <p className="mt-2 text-sm text-ivory/50">Versão {POLICY_VERSION}</p>
+      <p className="mt-2 text-sm text-ivory/70">Versão {POLICY_VERSION}</p>
       <div className="mt-8 space-y-6 [&_h2]:display [&_h2]:text-2xl [&_h2]:text-ivory">
         <section><h2>Quem somos</h2><p>Professor Christian Nicholas — Aulas de Dança (Método Emballo) é o responsável pelo tratamento dos dados coletados neste site. Contato: Instagram @profchristiannicholas. <em>(Dados completos do controlador a confirmar.)</em></p></section>
         <section><h2>Quais dados coletamos</h2><p>Nome completo, número de WhatsApp, bairro, dia e horário de preferência para as aulas, data do cadastro e a origem do acesso. Não solicitamos dados além do necessário.</p></section>
