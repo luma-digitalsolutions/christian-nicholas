@@ -9,7 +9,7 @@ echo "== POST /api/leads (cadastro válido, modo demo)"
 ID=$(node -e 'console.log(crypto.randomUUID())')
 curl -s -X POST "$B/api/leads" -H 'content-type: application/json' -d "{
   \"submissionId\":\"$ID\",\"nome\":\"Maria Teste\",\"whatsapp\":\"(81) 98765-4321\",
-  \"bairro\":\"Bairro Demo Centro\",\"dia\":\"TER\",\"horario\":\"19:00\",
+  \"bairro\":\"Boa Viagem\",\"dia\":\"TER\",\"horario\":\"19:00\",
   \"consentimentoPrivacidade\":true,\"consentimentoMarketing\":false}"; echo
 echo "== POST inválido (esperado 400)"
 curl -s -o /dev/null -w "%{http_code}\n" -X POST "$B/api/leads" -H 'content-type: application/json' -d '{}'

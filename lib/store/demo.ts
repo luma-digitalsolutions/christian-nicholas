@@ -6,12 +6,20 @@ const T = (id: string, bairro: string, dia: Turma["dia"], inicio: string, fim: s
   capacidade: 20, vagas, status, link: `https://chat.whatsapp.com/DEMO-NAO-REAL-${id}`, observacoes: "demo",
 });
 
+// Cobre todos os desfechos do formulário: vaga disponível, lotada (lista de espera), planejada (sem turma
+// aberta) e bairros com alternativas em outros dias. Bairros reais só como cenário; as turmas não existem.
 export const DEMO_TURMAS: Turma[] = [
-  T("DEMO-01", "Bairro Demo Centro", "TER", "19:00", "20:00", 8, "ATIVA"),
-  T("DEMO-02", "Bairro Demo Centro", "QUI", "20:00", "21:00", 5, "ATIVA"),
-  T("DEMO-03", "Bairro Demo Centro", "SAB", "10:00", "11:00", 0, "LOTADA"),
-  T("DEMO-04", "Bairro Demo Norte", "QUA", "19:00", "20:00", 12, "ATIVA"),
-  T("DEMO-05", "Bairro Demo Norte", "SEX", "18:00", "19:00", 0, "PLANEJADA"),
+  T("DEMO-01", "Boa Viagem", "TER", "19:00", "20:00", 8, "ATIVA"),
+  T("DEMO-02", "Boa Viagem", "QUI", "20:00", "21:00", 5, "ATIVA"),
+  T("DEMO-03", "Boa Viagem", "SAB", "10:00", "11:00", 0, "LOTADA"),
+  T("DEMO-04", "Casa Forte", "QUA", "19:00", "20:00", 12, "ATIVA"),
+  T("DEMO-05", "Casa Forte", "SEX", "18:00", "19:00", 0, "PLANEJADA"),
+  T("DEMO-06", "Espinheiro", "SEG", "20:00", "21:00", 14, "ATIVA"),
+  T("DEMO-07", "Espinheiro", "SAB", "09:00", "10:00", 3, "ATIVA"),
+  T("DEMO-08", "Graças", "QUI", "19:00", "20:00", 10, "ATIVA"),
+  T("DEMO-09", "Graças", "SAB", "11:00", "12:00", 0, "LOTADA"),
+  T("DEMO-10", "Tamarineira", "TER", "20:00", "21:00", 0, "LOTADA"),
+  T("DEMO-11", "Tamarineira", "QUA", "18:00", "19:00", 0, "PLANEJADA"),
 ];
 
 export function createDemoStore(): Store {

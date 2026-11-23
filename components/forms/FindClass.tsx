@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { maskPhone, leadInputSchema } from "@/lib/validation";
+import { mockCatalog, mockSelect, mockSubmit, USE_MOCK } from "@/lib/mock-client";
 import { DIAS, DIA_LABEL, type LeadResult, type PublicTurma } from "@/lib/types";
 
 const OUTRO = "__outro__";
@@ -34,7 +35,7 @@ export function FindClass() {
 
   useEffect(() => {
     startedAt.current = Date.now();
-    fetch("/api/turmas").then((r) => (r.ok ? r.json() : Promise.reject())).then(setCat).catch(() => setLoadErr(true));
+    (USE_MOCK ? Promise.resolve(mockCatalog()) : fetch("/api/turmas").then((r) => (r.ok ? r.json() : Promise.reject()))).then(setCat).catch(() => setLoadErr(true));
   }, []);
 
   const bairros = useMemo(() => [...new Set((cat?.turmas ?? []).map((t) => t.bairro))].sort(), [cat]);
@@ -56,6 +57,7 @@ export function FindClass() {
   }, [cat, inBairro, dia, isOutro]);
 
   async function post(url: string, body: unknown): Promise<LeadResult> {
+    if (USE_MOCK) return url.endsWith("/alternativa") ? mockSelect(body as never) : mockSubmit(body as never);
     const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error ?? "Não foi possível concluir o cadastro. Seus dados não foram salvos.");
@@ -212,7 +214,7 @@ function Result({ r, busy, err, keptPref, onKeep, onChoose, onReset }: {
         <h3 className="display t-2">Encontramos uma turma para você!</h3>
         <div className="mt-6"><Slot t={r.turma} /></div>
         <p className="mt-5 text-sm text-ivory/85">Entre no grupo da turma pelo botão abaixo para receber as orientações para começar. {r.demo && "(Demonstração: o botão abre uma página fictícia.)"}</p>
-        <a href={`/api/convite?t=${encodeURIComponent(r.inviteToken ?? "")}`} target="_blank" rel="noopener noreferrer" className="btn mt-6 w-full">Entrar no grupo da turma</a>
+        <a href={r.inviteToken ? `/api/convite?t=${encodeURIComponent(r.inviteToken)}` : "/demo-convite"} target="_blank" rel="noopener noreferrer" className="btn mt-6 w-full">Entrar no grupo da turma</a>
         <button onClick={onReset} className="link link--on mt-4 py-2 text-sm text-ivory/75">Fazer outro cadastro</button>
       </div>
     );
