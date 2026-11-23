@@ -1,5 +1,5 @@
 "use client";
-import { CoupleMark } from "../CoupleMark";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const LINKS = [["Método", "#metodo"], ["Professor", "#professor"], ["Como funciona", "#como-funciona"], ["Dúvidas", "#duvidas"]];
@@ -16,7 +16,7 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-ink/85 backdrop-blur-md">
       <div className="wrap flex h-16 items-center justify-between">
         <a href="#topo" aria-label="Professor Christian Nicholas — início" className="-ml-1 p-1">
-          <CoupleMark className="h-11 w-11" />
+          <Image src="/images/casal-header.jpg" alt="" width={240} height={250} priority className="h-12 w-auto mix-blend-lighten" />
         </a>
         <nav aria-label="Principal" className="hidden items-center gap-8 md:flex">
           {LINKS.map(([l, h]) => <a key={h} href={h} className="link py-2 text-[.8125rem] uppercase tracking-[.18em] text-ivory/85">{l}</a>)}

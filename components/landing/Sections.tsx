@@ -1,6 +1,7 @@
 import { DEPOIMENTOS, FAQ, INSECURITIES, MISSAO, PASSOS, PROFESSOR_BIO, PROFESSOR_MISSAO_CURTA, SITE, TRAJETORIA, VALORES, VISAO } from "@/content/site";
 import { Heading } from "../Heading";
-import { FinalMark, Portrait } from "./Client";
+import Image from "next/image";
+import { Portrait } from "./Client";
 
 export { Metodo } from "./Metodo";
 
@@ -136,11 +137,13 @@ export function Faq() {
 
 export function CtaFinal() {
   return (
-    <section id="cta-final" className="section relative overflow-hidden text-center md:py-40">
-      <FinalMark />
-      <div className="wrap relative">
+    <section id="cta-final" className="section text-center !pt-0 md:!pb-28">
+      <div className="wrap">
+       <div className="border border-gold/40 px-5 py-12 md:px-10 md:py-20">
+        <Image src="/images/logo-rodape.png" alt="Professor Christian Nicholas — Aulas de Dança" width={750} height={415} sizes="(min-width: 768px) 448px, 80vw" className="mx-auto mb-12 h-auto w-[min(80vw,28rem)]" />
         <Heading text="O primeiro passo é *decidir começar.*" className="t-1 mx-auto max-w-4xl" />
         <div className="mt-10"><a href="#turma" className="btn">Encontre sua turma</a></div>
+       </div>
       </div>
     </section>
   );
