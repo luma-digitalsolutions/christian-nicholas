@@ -7,7 +7,7 @@ export default function DemoConvite() {
       <p className="eyebrow mb-4">Modo demonstração</p>
       <h1 className="display text-4xl">Aqui abriria o grupo de WhatsApp da turma.</h1>
       <p className="mt-4 text-ivory/70">Em produção, este botão leva ao convite real cadastrado na planilha. Nada foi salvo em Google Sheets.</p>
-      <Link href="/#turma" className="btn-gold mt-8">Voltar ao site</Link>
+      <Link href="/#turma" className="btn mt-8">Voltar ao site</Link>
     </main>
   );
 }

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SplitText } from "../Motion";
 import { maskPhone, leadInputSchema } from "@/lib/validation";
 import { DIAS, DIA_LABEL, type LeadResult, type PublicTurma } from "@/lib/types";
 
@@ -28,7 +27,7 @@ export function FindClass() {
   const startedAt = useRef(0);
   const honeypot = useRef<HTMLInputElement>(null);
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, watch, setValue, setFocus, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(formSchema), defaultValues: { consentimentoPrivacidade: false as unknown as true, consentimentoMarketing: false },
   });
   const bairro = watch("bairro"), dia = watch("dia");
@@ -63,6 +62,7 @@ export function FindClass() {
     return j;
   }
 
+  const onInvalid = (errs: Record<string, unknown>) => { const k = Object.keys(errs)[0]; if (k) setFocus(k as never); };
   const onSubmit = handleSubmit(async (v) => {
     setServerErr("");
     const finalBairro = isOutro ? outro.trim() : v.bairro;
@@ -77,7 +77,7 @@ export function FindClass() {
       setResult(res);
     } catch (e) { setServerErr((e as Error).message); }
     finally { setBusy(false); }
-  });
+  }, onInvalid);
 
   async function choose(turmaId: string) {
     if (!result) return;
@@ -91,14 +91,13 @@ export function FindClass() {
 
   return (
     <div id="turma" className="scroll-mt-20">
-      <p className="eyebrow mb-4">Sua vez de entrar na pista</p>
-      <SplitText className="text-[clamp(2rem,3.6vw,3.2rem)]" text="Seu lugar na pista *espera por você.*" />
-      <p className="mb-6 mt-4 text-base leading-relaxed text-ivory/80">
-        Leva <strong className="text-gold">30 segundos</strong>. Diga onde e quando prefere dançar — encontramos a turma ou abrimos uma nova para você. Você não precisa saber dançar.
+      <h2 className="display t-3">Encontre <em>sua turma.</em></h2>
+      <p className="body-text mb-6 mt-4 hidden sm:block">
+        Escolha bairro, dia e horário. Se ainda não houver turma, seu interesse ajuda a abrir uma. Você não precisa saber dançar.
       </p>
-        <div className="border border-gold/30 bg-ink p-5 md:p-7" aria-live="polite">
+        <div className="mt-4 border border-gold/30 bg-ink p-4 sm:mt-0 md:p-8" aria-live="polite">
           {cat?.mode === "demo" && (
-            <p className="mb-6 border border-gold/40 bg-gold/10 px-4 py-3 text-xs leading-relaxed text-gold">
+            <p className="mb-4 border border-gold/40 bg-gold/10 px-3 py-2 text-xs leading-snug text-gold sm:mb-6 sm:px-4 sm:py-3 sm:text-sm">
               MODO DEMONSTRAÇÃO — turmas fictícias. Nenhum dado é salvo em planilha e nenhum grupo real de WhatsApp é aberto.
             </p>
           )}
@@ -109,24 +108,16 @@ export function FindClass() {
                   onReset={() => { setResult(null); setKeptPref(false); submissionId.current = null; }} />
               </motion.div>
             ) : loadErr ? (
-              <p role="alert" className="text-ivory/80">Não conseguimos carregar as turmas agora. Recarregue a página em instantes.</p>
+              <p role="alert" className="text-ivory/85">Não conseguimos carregar as turmas agora. Recarregue a página em instantes.</p>
             ) : !cat ? (
-              <p className="text-ivory/60">Carregando turmas…</p>
+              <div>
+                <label htmlFor="bairro-load" className="label">Bairro</label>
+                <select id="bairro-load" className="field" disabled defaultValue=""><option value="">Carregando turmas…</option></select>
+              </div>
             ) : (
-              <motion.form key="form" onSubmit={onSubmit} noValidate initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-5">
+              <motion.form key="form" onSubmit={onSubmit} noValidate initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4 sm:space-y-5">
                 <div>
-                  <label htmlFor="nome" className="mb-2 block text-xs uppercase tracking-[.2em] text-ivory/70">Nome completo</label>
-                  <input id="nome" autoComplete="name" className="field" aria-invalid={!!errors.nome} {...register("nome")} />
-                  {err(errors.nome?.message)}
-                </div>
-                <div>
-                  <label htmlFor="whatsapp" className="mb-2 block text-xs uppercase tracking-[.2em] text-ivory/70">WhatsApp</label>
-                  <input id="whatsapp" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="(00) 00000-0000" className="field" aria-invalid={!!errors.whatsapp}
-                    {...register("whatsapp", { onChange: (e) => setValue("whatsapp", maskPhone(e.target.value)) })} />
-                  {err(errors.whatsapp?.message)}
-                </div>
-                <div>
-                  <label htmlFor="bairro" className="mb-2 block text-xs uppercase tracking-[.2em] text-ivory/70">Bairro</label>
+                  <label htmlFor="bairro" className="label">Bairro</label>
                   <select id="bairro" className="field" aria-invalid={!!errors.bairro} defaultValue="" {...register("bairro", { onChange: () => { setValue("dia", "" as never); setValue("horario", ""); } })}>
                     <option value="" disabled>Selecione</option>
                     {bairros.map((b) => <option key={b} value={b}>{b}</option>)}
@@ -137,7 +128,7 @@ export function FindClass() {
                 </div>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label htmlFor="dia" className="mb-2 block text-xs uppercase tracking-[.2em] text-ivory/70">Dia da semana</label>
+                    <label htmlFor="dia" className="label">Dia da semana</label>
                     <select id="dia" className="field" disabled={!bairro} aria-invalid={!!errors.dia} defaultValue="" {...register("dia", { onChange: () => setValue("horario", "") })}>
                       <option value="" disabled>{bairro ? "Selecione" : "Escolha o bairro"}</option>
                       {diaOptions.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
@@ -145,7 +136,7 @@ export function FindClass() {
                     {err(errors.dia?.message)}
                   </div>
                   <div>
-                    <label htmlFor="horario" className="mb-2 block text-xs uppercase tracking-[.2em] text-ivory/70">Horário</label>
+                    <label htmlFor="horario" className="label">Horário</label>
                     <select id="horario" className="field" disabled={!dia} aria-invalid={!!errors.horario} defaultValue="" {...register("horario")}>
                       <option value="" disabled>{dia ? "Selecione" : "Escolha o dia"}</option>
                       {horaOptions.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
@@ -153,19 +144,30 @@ export function FindClass() {
                     {err(errors.horario?.message)}
                   </div>
                 </div>
+                <div>
+                  <label htmlFor="nome" className="label">Nome completo</label>
+                  <input id="nome" autoComplete="name" spellCheck={false} className="field" aria-invalid={!!errors.nome} {...register("nome")} />
+                  {err(errors.nome?.message)}
+                </div>
+                <div>
+                  <label htmlFor="whatsapp" className="label">WhatsApp</label>
+                  <input id="whatsapp" type="tel" inputMode="tel" autoComplete="tel-national" spellCheck={false} placeholder="(00) 00000-0000" className="field" aria-invalid={!!errors.whatsapp}
+                    {...register("whatsapp", { onChange: (e) => setValue("whatsapp", maskPhone(e.target.value)) })} />
+                  {err(errors.whatsapp?.message)}
+                </div>
                 {/* honeypot: invisível para pessoas */}
                 <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-0 w-0 opacity-0" />
-                <label className="flex cursor-pointer items-start gap-3 text-sm text-ivory/80">
+                <label className="flex cursor-pointer items-start gap-3 text-sm text-ivory/85">
                   <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#d6ae70]" {...register("consentimentoPrivacidade")} />
-                  <span>Li e aceito o tratamento dos meus dados para encontrar minha turma, conforme a <Link href="/politica-de-privacidade" target="_blank" className="text-gold underline">Política de Privacidade</Link>.</span>
+                  <span>Li e aceito o tratamento dos meus dados para encontrar minha turma, conforme a <Link href="/politica-de-privacidade" target="_blank" className="link link--on text-gold">Política de Privacidade</Link>.</span>
                 </label>
                 {err(errors.consentimentoPrivacidade?.message)}
-                <label className="flex cursor-pointer items-start gap-3 text-sm text-ivory/60">
+                <label className="flex cursor-pointer items-start gap-3 text-sm text-ivory/85">
                   <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-[#d6ae70]" {...register("consentimentoMarketing")} />
                   <span>(Opcional) Quero receber novidades e avisos de novas turmas.</span>
                 </label>
                 {serverErr && <p role="alert" className="border border-[#e07a6b]/50 p-3 text-sm text-[#f0a090]">{serverErr}</p>}
-                <button type="submit" className="btn-gold w-full !min-h-16 !text-sm" disabled={busy}>{busy ? "Procurando…" : "Encontrar minha turma →"}</button>
+                <button type="submit" className="btn w-full !min-h-16" disabled={busy}>{busy ? "Procurando…" : "Encontrar minha turma →"}</button>
               </motion.form>
             )}
           </AnimatePresence>
@@ -177,10 +179,10 @@ export function FindClass() {
 function Slot({ t }: { t: PublicTurma }) {
   return (
     <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 border-y border-gold/25 py-5 text-sm">
-      <dt className="text-ivory/50">Bairro</dt><dd>{t.bairro}</dd>
-      <dt className="text-ivory/50">Dia</dt><dd>{DIA_LABEL[t.dia]}</dd>
-      <dt className="text-ivory/50">Horário</dt><dd>{t.inicio}{t.fim ? ` às ${t.fim}` : ""}</dd>
-      {t.local && <><dt className="text-ivory/50">Local</dt><dd>{t.local}</dd></>}
+      <dt className="text-ivory/75">Bairro</dt><dd>{t.bairro}</dd>
+      <dt className="text-ivory/75">Dia</dt><dd>{DIA_LABEL[t.dia]}</dd>
+      <dt className="text-ivory/75">Horário</dt><dd>{t.inicio}{t.fim ? ` às ${t.fim}` : ""}</dd>
+      {t.local && <><dt className="text-ivory/75">Local</dt><dd>{t.local}</dd></>}
     </dl>
   );
 }
@@ -191,7 +193,7 @@ function Alternatives({ alts, busy, onChoose }: { alts: PublicTurma[]; busy: boo
       {alts.map((a) => (
         <li key={a.id} className="flex flex-col gap-3 border border-gold/25 p-4 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-sm">{DIA_LABEL[a.dia]} · {a.inicio}{a.local ? ` · ${a.local}` : ""}</span>
-          <button className="btn-ghost !min-h-11 !px-4" disabled={busy} onClick={() => onChoose(a.id)}>Escolher esta turma</button>
+          <button className="btn btn-sm" disabled={busy} onClick={() => onChoose(a.id)}>Escolher esta turma</button>
         </li>
       ))}
     </ul>
@@ -207,11 +209,11 @@ function Result({ r, busy, err, keptPref, onKeep, onChoose, onReset }: {
     return (
       <div>
         <p className="eyebrow mb-3">Cadastro registrado</p>
-        <h3 className="display text-5xl">Encontramos uma turma para você!</h3>
+        <h3 className="display t-2">Encontramos uma turma para você!</h3>
         <div className="mt-6"><Slot t={r.turma} /></div>
-        <p className="mt-5 text-sm text-ivory/70">Entre no grupo da turma pelo botão abaixo para receber as orientações para começar. {r.demo && "(Demonstração: o botão abre uma página fictícia.)"}</p>
-        <a href={`/api/convite?t=${encodeURIComponent(r.inviteToken ?? "")}`} target="_blank" rel="noopener noreferrer" className="btn-gold mt-6 w-full">Entrar no grupo da turma</a>
-        <button onClick={onReset} className="mt-4 text-sm text-ivory/50 underline">Fazer outro cadastro</button>
+        <p className="mt-5 text-sm text-ivory/85">Entre no grupo da turma pelo botão abaixo para receber as orientações para começar. {r.demo && "(Demonstração: o botão abre uma página fictícia.)"}</p>
+        <a href={`/api/convite?t=${encodeURIComponent(r.inviteToken ?? "")}`} target="_blank" rel="noopener noreferrer" className="btn mt-6 w-full">Entrar no grupo da turma</a>
+        <button onClick={onReset} className="link link--on mt-4 py-2 text-sm text-ivory/75">Fazer outro cadastro</button>
       </div>
     );
   }
@@ -219,20 +221,20 @@ function Result({ r, busy, err, keptPref, onKeep, onChoose, onReset }: {
   return (
     <div>
       <p className="eyebrow mb-3">Interesse registrado</p>
-      <h3 className="display text-4xl leading-tight md:text-5xl">
+      <h3 className="display t-3">
         {lotada ? "Essa turma está lotada, mas colocamos você na lista de espera!" : "Ainda não temos uma turma nesse horário, mas seu interesse já foi registrado!"}
       </h3>
-      <p className="mt-4 text-sm leading-relaxed text-ivory/70">Seus dados poderão ser usados pelo professor para organizar novas turmas{lotada ? " e avisar sobre vagas" : ""}.</p>
+      <p className="mt-4 text-sm leading-relaxed text-ivory/85">Seus dados poderão ser usados pelo professor para organizar novas turmas{lotada ? " e avisar sobre vagas" : ""}.</p>
       {alts.length > 0 && !keptPref && (
         <>
           <p className="mt-7 text-sm uppercase tracking-[.2em] text-gold">Turmas com vaga no seu bairro</p>
           <Alternatives alts={alts} busy={busy} onChoose={onChoose} />
-          <button onClick={onKeep} className="btn-ghost mt-5 w-full">Manter minha preferência e aguardar</button>
+          <button onClick={onKeep} className="link mt-5 inline-block py-2 text-sm font-semibold">Manter minha preferência e aguardar</button>
         </>
       )}
-      {keptPref && <p className="mt-6 border border-gold/30 p-4 text-sm text-ivory/80">Combinado! Mantivemos sua preferência original na lista de interesse.</p>}
+      {keptPref && <p className="mt-6 border border-gold/30 p-4 text-sm text-ivory/85">Combinado! Mantivemos sua preferência original na lista de interesse.</p>}
       {errBox}
-      <button onClick={onReset} className="mt-5 text-sm text-ivory/50 underline">Fazer outro cadastro</button>
+      <button onClick={onReset} className="link link--on mt-5 py-2 text-sm text-ivory/75">Fazer outro cadastro</button>
     </div>
   );
 }

@@ -1,26 +1,27 @@
 import { Footer } from "@/components/layout/Footer";
 import { Header, StickyCta } from "@/components/layout/Header";
 import { VideoHero } from "@/components/landing/VideoHero";
-import { ScrollProgress } from "@/components/Motion";
-import { ComoFunciona, CtaFinal, Depoimentos, Emocional, Faq, Metodo, Professor } from "@/components/landing/Sections";
+import { MotionProvider } from "@/components/MotionProvider";
+import { ComoFunciona, CtaFinal, Depoimentos, Emocional, Faq, Metodo, Professor, Trajetoria } from "@/components/landing/Sections";
 
 export default function Home() {
   return (
-    <>
-      <ScrollProgress />
+    <MotionProvider>
+      <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
       <Header />
-      <main>
+      <main id="conteudo" tabIndex={-1} className="outline-none">
         <VideoHero />
         <Emocional />
         <Metodo />
-        <Professor />
         <ComoFunciona />
+        <Professor />
+        <Trajetoria />
         <Depoimentos />
         <Faq />
         <CtaFinal />
       </main>
       <Footer />
       <StickyCta />
-    </>
+    </MotionProvider>
   );
 }

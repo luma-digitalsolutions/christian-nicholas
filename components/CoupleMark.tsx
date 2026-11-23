@@ -1,7 +1,8 @@
-/** Silhueta dourada de um casal dançando (marca do cabeçalho). */
-export function CoupleMark({ className }: { className?: string }) {
+/** Silhueta dourada de um casal dançando. Com `decorative`, fica oculta para leitores de tela. */
+export function CoupleMark({ className, decorative = false }: { className?: string; decorative?: boolean }) {
+  const a11y = decorative ? ({ "aria-hidden": true, focusable: "false" } as const) : ({ role: "img", "aria-label": "Professor Christian Nicholas — Aulas de Dança" } as const);
   return (
-    <svg viewBox="0 0 120 120" role="img" aria-label="Professor Christian Nicholas — Aulas de Dança" className={className}>
+    <svg viewBox="0 0 120 120" className={className} {...a11y}>
       <g fill="#D6AE70" stroke="#080808" strokeWidth="1.1" strokeLinejoin="round">
         <ellipse cx="78" cy="22" rx="5" ry="6.3" transform="rotate(-22 78 22)" />
         <path d="M64 33 C68 29 77 30 81 35 L79 46 C75 53 71 57 69 63 L58 61 C61 52 63 42 64 33 Z" />

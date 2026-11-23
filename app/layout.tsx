@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: "/" },
 };
-export const viewport: Viewport = { themeColor: "#080808", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#080808", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const ld = {
@@ -28,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
   return (
     <html lang="pt-BR" className={`${serif.variable} ${sans.variable} ${label.variable}`}>
+      <head><link rel="preconnect" href="https://i.ytimg.com" /></head>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
         {children}
